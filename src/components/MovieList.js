@@ -21,7 +21,6 @@ const MovieList = () => {
   useEffect(() => {
     movies$ // movies$ returns a promise
       .then((data) => {
-        console.log(data);
         dispatch(add({ data }));
       })
       .catch((err) => console.log(err));
@@ -61,7 +60,6 @@ const MovieList = () => {
     );
   }
 
-  console.log("moviesToDisplay==>", moviesToDisplay);
   return (
     <div className="home">
       <h1>Movies</h1>
@@ -99,7 +97,12 @@ const MovieList = () => {
             />
             <div className="per_page">
               <span>Show</span>
-              <select onChange={(e) => setPerPage(Number(e.target.value))}>
+              <select
+                onChange={(e) => {
+                  setPerPage(Number(e.target.value));
+                  setActivePage(1);
+                }}
+              >
                 {[12, 8, 4].map((elem) => {
                   return <option key={elem}>{elem}</option>;
                 })}

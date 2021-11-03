@@ -8,7 +8,7 @@ import NotifyMessage from "./NotifyMessage";
 const MovieCard = ({ movie }) => {
   const dispatch = useDispatch();
   const [deleted, setDeleted] = useState(false); // State for delete animation
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState(null); //State for pop up message "liked" or "disliked"
   const [displayPopUp, setDisplayPopUp] = useState(false);
 
   //abbraviate like and dislike numbers if > 1000 to avoid show large number
@@ -32,23 +32,29 @@ const MovieCard = ({ movie }) => {
   const handleClickLike = () => {
     dispatch(like({ id: movie.id }));
     if (message === "liked") {
+      // undo your like
       setMessage(null);
     } else {
+      // You liked this movie show messages
       setMessage("liked");
       setDisplayPopUp(true);
     }
   };
+
   const handleClickDislike = () => {
     dispatch(dislike({ id: movie.id }));
     if (message === "disliked") {
+      // undo your dislike
       setMessage(null);
     } else {
+      // You disliked this movie show messages
       setMessage("disliked");
       setDisplayPopUp(true);
     }
   };
 
-  if (message) {
+  // hide notify messages after 2 seconds
+  if (displayPopUp) {
     setTimeout(() => {
       setDisplayPopUp(false);
     }, 2000);

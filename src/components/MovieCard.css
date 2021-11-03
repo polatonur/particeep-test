@@ -1,4 +1,5 @@
 .movie_card {
+  overflow: hidden;
   transition: ease 0.3s;
   padding: 20px;
   width: 300px;
@@ -49,7 +50,6 @@
 .like_dislike > div {
   display: flex;
   align-items: center;
-  /* width: 80px; */
   margin-left: 20px;
 }
 .like_dislike .counter {
@@ -62,7 +62,6 @@
 .movie_card_buttons .icon {
   cursor: pointer;
   position: relative;
-  /* transition: 0.3s ease; */
 }
 
 .movie_card_buttons .icon-dislike:hover {
@@ -115,6 +114,8 @@
 .card_deleted {
   animation: disappear ease-in-out 0.9s forwards;
 }
+
+/* delete effect */
 @keyframes disappear {
   0% {
     transform: scale(1.3) translateZ(100px);
@@ -130,5 +131,24 @@
   100% {
     transform: scale(0.5);
     opacity: 0;
+  }
+}
+
+@media (max-width: 330px) {
+  .movie_card {
+    width: 90vw;
+    margin: 10px;
+    height: 300px;
+    padding: 20px;
+  }
+  .movie_card_buttons {
+    padding: 0 10px;
+  }
+  .like_dislike .counter {
+    font-size: 16px;
+  }
+
+  .like_dislike > div {
+    margin-left: 10px;
   }
 }
