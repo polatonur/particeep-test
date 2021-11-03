@@ -1,0 +1,51 @@
+.home {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.home h1 {
+  text-align: center;
+  font-size: 50px;
+  animation: slide 0.8s ease-in-out;
+}
+@keyframes slide {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.filter {
+  background-color: gray;
+  padding: 2px 5px;
+  display: flex;
+  align-items: center;
+  border: 2px solid grey;
+  color: white;
+  border-radius: 5px;
+  font-size: 20px;
+  height: 30px;
+}
+.filter > span {
+  margin-right: 20px;
+}
+.filter select {
+  outline: none;
+  height: 30px;
+  font-size: 20px;
+  border: none;
+  color: white;
+  background-color: gray;
+  margin: 0 auto;
+}
+.movie_list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+}

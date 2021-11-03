@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
-import { movies$ } from "../api/movies";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { add, del, like, dislike, filter } from "../reducers/movieSlice";
+import { movies$ } from "../api/movies";
+import MovieCard from "./MovieCard";
+import "./MovieList.css";
+import { add, filter } from "../reducers/movieSlice";
 
 const MovieList = () => {
-  const dispatch = useDispatch();
   const movies = useSelector((state) => state.movies);
   const movieFilter = useSelector((state) => state.filter);
-
+  const dispatch = useDispatch();
   console.log(movies);
   // dispatch(del({ mov: "hey" }));
 
@@ -21,9 +22,6 @@ const MovieList = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleClick = (id) => {
-    dispatch(del({ id }));
-  };
   const types = ["All"];
   let moviesToDisplay = movies;
 
@@ -43,29 +41,26 @@ const MovieList = () => {
   }
   console.log("moviesToDisplay==>", moviesToDisplay);
   return (
-    <div className="movie_list">
+    <div className="home">
+      <h1>Movies</h1>
       {movies && (
-        <select onChange={(e) => dispatch(filter({ filter: e.target.value }))}>
-          {types.map((elem) => {
-            return <option value={elem}>{elem}</option>;
-          })}
-        </select>
+        <div className="filter">
+          <span>Filter:</span>
+          <select
+            onChange={(e) => dispatch(filter({ filter: e.target.value }))}
+          >
+            {types.map((elem) => {
+              return <option value={elem}>{elem}</option>;
+            })}
+          </select>
+        </div>
       )}
-      {moviesToDisplay &&
-        moviesToDisplay.map((elem) => {
-          return (
-            <div key={elem.id}>
-              <p onClick={() => handleClick(elem.id)}> {elem.title}</p>
-              <p style={{ color: "red" }}>{elem.category}</p>
-              <button onClick={() => dispatch(like({ id: elem.id }))}>
-                likes:{elem.likes}
-              </button>
-              <button onClick={() => dispatch(dislike({ id: elem.id }))}>
-                dislikes:{elem.dislikes}
-              </button>
-            </div>
-          );
-        })}
+      <div className="movie_list">
+        {moviesToDisplay &&
+          moviesToDisplay.map((elem) => {
+            return <MovieCard key={elem.id} movie={elem} />;
+          })}
+      </div>
     </div>
   );
 };
