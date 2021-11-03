@@ -3,10 +3,13 @@ import { Trash, ThumbsDown, ThumbsUp } from "phosphor-react";
 import { useDispatch } from "react-redux";
 import { del, like, dislike } from "../reducers/movieSlice";
 import { useState } from "react";
+import NotifyMessage from "./NotifyMessage";
 
 const MovieCard = ({ movie }) => {
   const dispatch = useDispatch();
-  const [deleted, setDeleted] = useState(false);
+  const [deleted, setDeleted] = useState(false); // State for delete animation
+  const [message, setMessage] = useState(null);
+  const [displayPopUp, setDisplayPopUp] = useState(false);
 
   //abbraviate like and dislike numbers if > 1000 to avoid show large number
   const numberAbbreviate = (number) => {
@@ -17,21 +20,52 @@ const MovieCard = ({ movie }) => {
     }
   };
 
-  const handleClick = () => {
+  const handleClickDelete = () => {
+    // first apply disappear effect
     setDeleted(true);
+    // than dispatch to delete item
     setTimeout(() => {
       dispatch(del({ id: movie.id }));
     }, 1000);
   };
 
+  const handleClickLike = () => {
+    dispatch(like({ id: movie.id }));
+    if (message === "liked") {
+      setMessage(null);
+    } else {
+      setMessage("liked");
+      setDisplayPopUp(true);
+    }
+  };
+  const handleClickDislike = () => {
+    dispatch(dislike({ id: movie.id }));
+    if (message === "disliked") {
+      setMessage(null);
+    } else {
+      setMessage("disliked");
+      setDisplayPopUp(true);
+    }
+  };
+
+  if (message) {
+    setTimeout(() => {
+      setDisplayPopUp(false);
+    }, 2000);
+  }
+
   return (
-    <div className={`${deleted ? "deleted" : ""} movie_card`}>
+    <div className={`${deleted ? "card_deleted" : ""} movie_card`}>
       <h2>{movie.title}</h2>
       <p>{movie.category}</p>
       <div className="movie_card_buttons">
         <div className="trash">
           <span className="icon">
-            <Trash className="trash" onClick={() => handleClick()} size={24} />
+            <Trash
+              className="trash"
+              onClick={() => handleClickDelete()}
+              size={24}
+            />
           </span>
         </div>
         <div className="like_dislike">
@@ -39,7 +73,7 @@ const MovieCard = ({ movie }) => {
             <span className="icon icon-dislike">
               <ThumbsDown
                 size={24}
-                onClick={() => dispatch(dislike({ id: movie.id }))}
+                onClick={() => handleClickDislike()}
                 weight={movie.isDisliked ? "fill" : "regular"}
                 color={movie.isDisliked ? "#EB0000" : "#000000"}
               />
@@ -49,7 +83,7 @@ const MovieCard = ({ movie }) => {
           <div className="dislike">
             <span className="icon icon-like">
               <ThumbsUp
-                onClick={() => dispatch(like({ id: movie.id }))}
+                onClick={() => handleClickLike()}
                 size={24}
                 weight={movie.isLiked ? "fill" : "regular"}
                 color={movie.isLiked ? "#2f9300" : "#000000"}
@@ -59,6 +93,11 @@ const MovieCard = ({ movie }) => {
           </div>
         </div>
       </div>
+      <NotifyMessage
+        message={message}
+        movieName={movie.title}
+        displayPopUp={displayPopUp}
+      />
     </div>
   );
 };
