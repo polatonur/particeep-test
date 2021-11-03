@@ -2,11 +2,13 @@ import "./MovieCard.css";
 import { Trash, ThumbsDown, ThumbsUp } from "phosphor-react";
 import { useDispatch } from "react-redux";
 import { del, like, dislike } from "../reducers/movieSlice";
+import { useState } from "react";
 
 const MovieCard = ({ movie }) => {
   const dispatch = useDispatch();
+  const [deleted, setDeleted] = useState(false);
 
-  //abbraviate like and dislike numbers if > 1000
+  //abbraviate like and dislike numbers if > 1000 to avoid show large number
   const numberAbbreviate = (number) => {
     if (number < 1e3) {
       return number;
@@ -14,20 +16,22 @@ const MovieCard = ({ movie }) => {
       return (number / 1e3).toFixed(1) + "K";
     }
   };
-  numberAbbreviate(12356);
+
+  const handleClick = () => {
+    setDeleted(true);
+    setTimeout(() => {
+      dispatch(del({ id: movie.id }));
+    }, 1000);
+  };
 
   return (
-    <div className="movie_card">
+    <div className={`${deleted ? "deleted" : ""} movie_card`}>
       <h2>{movie.title}</h2>
       <p>{movie.category}</p>
       <div className="movie_card_buttons">
         <div className="trash">
           <span className="icon">
-            <Trash
-              className="trash"
-              onClick={() => dispatch(del({ id: movie.id }))}
-              size={24}
-            />
+            <Trash className="trash" onClick={() => handleClick()} size={24} />
           </span>
         </div>
         <div className="like_dislike">

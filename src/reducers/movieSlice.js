@@ -15,6 +15,9 @@ export const movieSlice = createSlice({
       state.movies = state.movies.filter((item) => {
         return item.id !== action.payload.id;
       });
+      if (state.movies.length === 0) {
+        state.movies = null;
+      }
     },
     like: (state, action) => {
       state.movies = state.movies.map((item) => {
